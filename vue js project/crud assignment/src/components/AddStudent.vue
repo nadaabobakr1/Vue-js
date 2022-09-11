@@ -49,18 +49,47 @@ export default ({
         email:'',
         age:'',
         reminder:false,
-        message:null
+        message:null,
+        studentsArray:[],
+        repeatedEmail:null,
 
       }
     },
     
     methods:{
+
+      async fetchStudents(){
+      const res = await fetch('/api/students')
+      const data = await res.json()
+       console.log("here at fetch Students")
+      console.log(data)
+      return data
+      },
    
 
-      validateForm: function(e) {
+     async validateForm(e) {
         e.preventDefault();
       this.formErrors = []; 
+      this.repeatedEmail=''
+      this.studentsArray= await this.fetchStudents()
+          const tempArray=this.studentsArray
+          console.log("this.email")
+          console.log(this.email)
+          const tempEmail=this.email
+          
 
+          this.repeatedEmail = tempArray.findIndex(function(student) {
+            console.log("student.email")
+            console.log(student.email)
+
+          return student.email===tempEmail
+          
+         
+          })
+
+        if (this.repeatedEmail !=-1) {
+          this.formErrors.push("Email used before please add another one");
+        }
      
       if (!this.name) {
         this.formErrors.push("Name Can't Be Empty");

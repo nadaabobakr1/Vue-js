@@ -63,6 +63,8 @@
           reminder:false,
           message:null,
           Students:[],
+          studentsArray:[],
+          repeatedEmail:null,
   
         }
       },
@@ -117,9 +119,18 @@
      async validateForm(e) {
           e.preventDefault();
           this.formErrors = []; 
+          this.studentsArray= await this.fetchStudents()
+          const tempArray=this.studentsArray
+
+          this.repeatedEmail = tempArray.findIndex(function(student) {
+          return student.email
+         
+          })
+
         
         console.log("this.studentName")
         console.log(this.studentName)
+        console.log(this.repeatedEmail)
         if (!this.studentName) {
           this.formErrors.push("Name Can't Be Empty");
         }
@@ -127,6 +138,9 @@
         if (!this.studentEmail) {
           this.formErrors.push("Email Can't Be Empty");
         }
+        // if (this.repeatedEmail !=-1) {
+        //   this.formErrors.push("Email used before please add another one");
+        // }
   
         if (!this.studentAge) {
           this.formErrors.push("Age Can't Be Empty");
